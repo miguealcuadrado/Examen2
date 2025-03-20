@@ -12,6 +12,7 @@ import javax.swing.WindowConstants;
 
 public class FrmJuego extends JFrame {
 
+    private JButton btnResultado;
     private JButton btnRepartir;
     private JButton btnVerificar;
     private JPanel pnlJugador1;
@@ -21,6 +22,7 @@ public class FrmJuego extends JFrame {
     private Jugador jugador1, jugador2;
 
     public FrmJuego() {
+        btnResultado = new JButton();
         btnRepartir = new JButton();
         btnVerificar = new JButton();
         tpJugadores = new JTabbedPane();
@@ -56,10 +58,19 @@ public class FrmJuego extends JFrame {
             }
         });
 
+        btnResultado.setBounds(150,225,100,25);
+        btnResultado.setText("Resultado");
+        btnResultado.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnResultadoClick(evt);
+            }
+        });
+
         getContentPane().setLayout(null);
         getContentPane().add(tpJugadores);
         getContentPane().add(btnRepartir);
         getContentPane().add(btnVerificar);
+        getContentPane().add(btnResultado);
 
         jugador1 = new Jugador();
         jugador2 = new Jugador();
@@ -74,14 +85,42 @@ public class FrmJuego extends JFrame {
     }
 
     private void btnVerificarClick(ActionEvent evt) {
-        switch (tpJugadores.getSelectedIndex()) {
-            case 0:
-                JOptionPane.showMessageDialog(null, jugador1.getGrupos() + "\nPuntaje de la jugadora Lorena: (" + jugador1.getPuntajeCartasNoEnEscalera() + ")");
-                break;
-            case 1:
-                JOptionPane.showMessageDialog(null, jugador2.getGrupos()+ "\nPuntaje del jugador Miguel: (" + jugador2.getPuntajeCartasNoEnEscalera() + ")");
-                break;
+
+        if (pnlJugador1.getComponentCount() == 0 && pnlJugador2.getComponentCount() == 0) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor reparta las cartas.");
+
+
+        }else {
+            switch (tpJugadores.getSelectedIndex()) {
+                case 0:
+                 JOptionPane.showMessageDialog(null, jugador1.getGrupos() + "\nPuntaje de la jugadora Lorena: (" + jugador1.getPuntajeCartasNoEnEscalera() + ")");
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(null, jugador2.getGrupos()+ "\nPuntaje del jugador Miguel: (" + jugador2.getPuntajeCartasNoEnEscalera() + ")");
+                    break;
+            }        
         }
+    }
+
+    private void btnResultadoClick(ActionEvent evt) {
+    
+        if (pnlJugador1.getComponentCount() == 0 && pnlJugador2.getComponentCount() == 0) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor reparta las cartas.");
+
+        }else if (jugador1.getPuntajeCartasNoEnEscalera() < jugador2.getPuntajeCartasNoEnEscalera()) {
+            int Resta = jugador1.getPuntajeCartasNoEnEscalera() - jugador2.getPuntajeCartasNoEnEscalera();
+            JOptionPane.showMessageDialog(null, "La jugadora Lorena ha ganado el juego con una diferencia de " + Resta + " Puntos.");
+
+
+        }else if (jugador1.getPuntajeCartasNoEnEscalera() > jugador2.getPuntajeCartasNoEnEscalera()) {
+            int Resta = jugador2.getPuntajeCartasNoEnEscalera() - jugador1.getPuntajeCartasNoEnEscalera();
+            JOptionPane.showMessageDialog(null, "El jugador Miguel ha ganado el juego con una diferencia de " + Resta + " Puntos.");
+            
+        }
+
+
+
+
     }
 
 }
